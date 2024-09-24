@@ -12,10 +12,7 @@ const RegisterForm = () => {
 
   const router = useRouter();
 
-  const handleSubmit = async (e: {
-    preventDefault: () => void;
-    target: any;
-  }) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!name || !email || !password) {
@@ -48,7 +45,7 @@ const RegisterForm = () => {
       });
 
       if (res.ok) {
-        const form = e.target;
+        const form = e.target as HTMLFormElement;
         form.reset();
         router.push("/");
       } else {

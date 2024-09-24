@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { version } from "../config/constants";
+import { version } from "../lib/config/constants";
 
 const Footer = () => {
   const scrollToTop = () => {

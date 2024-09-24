@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { navLinks } from "@/config/constants";
+import { navLinks } from "@/lib/config/constants";
 import { motion } from "framer-motion";
 import { Bars2Icon, XMarkIcon } from "@heroicons/react/24/outline";
 

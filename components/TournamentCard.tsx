@@ -5,10 +5,12 @@ const TournamentCard = ({}) => {
   return (
     <div className="card bg-secondary w-96 shadow-xl rounded-xl">
       <figure className="px-6 pt-6 flex justify-center">
-        <img
+        <Image
           src="/images/tournament2.jpg"
           alt="Tournament"
           className="rounded-xl"
+          width={200}
+          height={200}
         />
       </figure>
       <div className="card-body items-center text-center py-5">
