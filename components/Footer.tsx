@@ -19,7 +19,7 @@ const Footer = () => {
             Copyright © | Universidad Politécnica de Madrid (UPM).
             <br />
           </p>
-          <p className="text-slate-600 lg:hidden">{version}</p>
+          <p className="text-text lg:hidden">{version}</p>
         </div>
 
         <p className="hidden lg:block lg:text-center">{version}</p>
@@ -32,7 +32,7 @@ const Footer = () => {
             className="w-14 h-14 p-3 flex items-center justify-center bg-primary text-accent font-semibold rounded-xl"
           >
             <svg
-              className="w-7 h-7 z-20"
+              className="w-7 h-7 z-20 text-bg"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
             >
