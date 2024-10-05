@@ -1,12 +1,10 @@
-import TournamentsSection from "@/components/TournamentsSection";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 
-export default function Tournaments() {
+export default function Players() {
   return (
     <main>
       <Navbar />
-      <TournamentsSection />
       <Footer />
     </main>
   );

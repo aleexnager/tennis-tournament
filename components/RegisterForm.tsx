@@ -6,19 +6,51 @@ import { useRouter } from "next/navigation";
 
 const RegisterForm = () => {
   const [name, setName] = useState("");
+  const [surname, setSurname] = useState("");
+  const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!name || !email || !password) {
+    if (
+      !name ||
+      !surname ||
+      !phone ||
+      !email ||
+      !username ||
+      !password ||
+      !confirmPassword
+    ) {
       setError("All fields are required.");
       return;
     }
+
+    const phoneRegex = /^[0-9]{9}$/;
+    if (!phoneRegex.test(phone)) {
+      setError("Phone number must be 9 digits.");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    setError(""); // Reset error message
 
     try {
       const resUserExists = await fetch("/api/userExists", {
@@ -26,13 +58,19 @@ const RegisterForm = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ phone, email, username }),
       });
 
-      const { user } = await resUserExists.json();
+      const { error: userError } = await resUserExists.json();
 
-      if (user) {
-        setError("User already exists.");
+      if (userError) {
+        // Mostrar mensajes específicos para cada campo que esté en conflicto
+        let errorMessage = "";
+        if (userError.email) errorMessage += `${userError.email}\n`;
+        if (userError.phone) errorMessage += `${userError.phone}\n`;
+        if (userError.username) errorMessage += `${userError.username}\n`;
+
+        setError(errorMessage.trim());
         return;
       }
 
@@ -41,18 +79,33 @@ const RegisterForm = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({
+          name,
+          surname,
+          phone,
+          email,
+          username,
+          password,
+        }),
       });
 
+      console.log("res", res);
+
       if (res.ok) {
+        setSuccessMessage(
+          "A confirmation email has been sent. Please check your inbox."
+        );
         const form = e.target as HTMLFormElement;
         form.reset();
-        router.push("/");
+        setTimeout(() => {
+          router.push("/");
+        }, 6000);
       } else {
-        console.log("User registration failed");
+        setError("User registration failed.");
+        console.log("User registration failed.");
       }
     } catch (error) {
-      console.log("Error during registering", error);
+      console.log("Error during registering.", error);
     }
   };
 
@@ -65,7 +118,19 @@ const RegisterForm = () => {
           <input
             onChange={(e) => setName(e.target.value)}
             type="text"
-            placeholder="Full Name"
+            placeholder="Name"
+            className="p-2 border border-gray-300 rounded-md"
+          />
+          <input
+            onChange={(e) => setSurname(e.target.value)}
+            type="text"
+            placeholder="Surname"
+            className="p-2 border border-gray-300 rounded-md"
+          />
+          <input
+            onChange={(e) => setPhone(e.target.value)}
+            type="text"
+            placeholder="Phone"
             className="p-2 border border-gray-300 rounded-md"
           />
           <input
@@ -75,9 +140,21 @@ const RegisterForm = () => {
             className="p-2 border border-gray-300 rounded-md"
           />
           <input
+            onChange={(e) => setUsername(e.target.value)}
+            type="text"
+            placeholder="Username"
+            className="p-2 border border-gray-300 rounded-md"
+          />
+          <input
             onChange={(e) => setPassword(e.target.value)}
             type="password"
             placeholder="Password"
+            className="p-2 border border-gray-300 rounded-md"
+          />
+          <input
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            type="password"
+            placeholder="Confirm Password"
             className="p-2 border border-gray-300 rounded-md"
           />
 
@@ -88,6 +165,12 @@ const RegisterForm = () => {
           {error && (
             <div className="bg-red-500 text-white text-sm w-fit py-1 px-3 mt-2 rounded-md">
               {error}
+            </div>
+          )}
+
+          {successMessage && (
+            <div className="bg-green-500 text-white text-sm w-fit py-1 px-3 mt-2 rounded-md">
+              {successMessage}
             </div>
           )}
 

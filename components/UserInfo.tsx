@@ -12,6 +12,9 @@ const UserInfo = () => {
         Name: <span className="font-bold">{session?.user?.name}</span>
       </div>
       <div>
+        Surname: <span className="font-bold">{session?.user?.name}</span>
+      </div>
+      <div>
         Email: <span className="font-bold">{session?.user?.email}</span>
       </div>
       <button

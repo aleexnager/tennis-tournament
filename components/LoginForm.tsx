@@ -2,11 +2,11 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { signIn } from "next-auth/react";
+import { signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 const LoginForm = () => {
-  const [email, setEmail] = useState("");
+  const [emailOrUsername, setEmailOrUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
@@ -17,7 +17,7 @@ const LoginForm = () => {
 
     try {
       const res = await signIn("credentials", {
-        email,
+        emailOrUsername,
         password,
         redirect: false,
       });
@@ -32,7 +32,30 @@ const LoginForm = () => {
         return;
       }
 
-      router.replace("dashboard");
+      if (res.ok) {
+        const userResponse = await fetch("/api/getUser", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ emailOrUsername }),
+        });
+
+        const userData = await userResponse.json();
+        console.log("userData: ", userData);
+
+        // Verificar si el usuario está verificado
+        if (!userData.user.verified) {
+          setError("Your account is not verified. Please check your email.");
+          await signOut({ redirect: false });
+          return;
+        }
+
+        setError(""); // Reset error message
+
+        // Si está verificado, redirige al dashboard
+        router.replace("dashboard");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -45,9 +68,9 @@ const LoginForm = () => {
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <input
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => setEmailOrUsername(e.target.value)}
             type="text"
-            placeholder="Email"
+            placeholder="Username or Email"
             className="p-2 border border-gray-300 rounded-md"
           />
           <input
@@ -69,7 +92,7 @@ const LoginForm = () => {
           <div className="flex justify-between">
             <Link
               className="text-blue-500 text-sm mt-3 text-right hover:underline"
-              href="/register"
+              href="/forgotPassword"
             >
               Forgot password?
             </Link>

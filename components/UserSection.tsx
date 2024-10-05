@@ -1,7 +1,7 @@
 import React from "react";
 import UserInfo from "./UserInfo";
 
-const TournamentsSection = () => {
+const UsersSection = () => {
   return (
     <section className="xl:mt-12 h-screen">
       <h1 className="flex justify-center text-6xl">User Info</h1>
@@ -14,4 +14,4 @@ const TournamentsSection = () => {
   );
 };
 
-export default TournamentsSection;
+export default UsersSection;
