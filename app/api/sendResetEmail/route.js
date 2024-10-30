@@ -1,11 +1,10 @@
 import { connectDB } from '@/lib/mongodb';
 import User from '@/models/user';
 import { NextResponse } from 'next/server';
-import bycrypt from 'bcryptjs';
 import nodemailer from 'nodemailer';
 import { v4 as uuidv4 } from 'uuid';
 
-// Configurations for nodemailer
+// Configuraciones para nodemailer
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -15,39 +14,35 @@ const transporter = nodemailer.createTransport({
 });
 
 export async function POST(req) {
-  try {
-    const { name, surname, phone, email, username, password } = await req.json();
-    console.log({ name, surname, phone, email, username, password });
+  const { email } = await req.json();
+  console.log({ email });
 
-    const hashedPassword = await bycrypt.hash(password, 10);
+  try {
     await connectDB();
 
-    // Generate a validation token
-    const validationToken = uuidv4();
+    // Busca el usuario por email
+    const user = await User.findOne({ email });
+    if (!user) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+    }
 
-    // Create a new user
-    const newUser = await User.create({
-      name,
-      surname,
-      phone,
-      email,
-      username,
-      password: hashedPassword,
-      validationToken,
-      total_points: 0,
-      total_sets_won: 0,
-      total_games_won: 0,
-      total_games_lost: 0,
-    });
-    console.log('newUser:', newUser);
+    // Genera un token de restablecimiento de contraseña
+    const resetToken = uuidv4();
+    const resetTokenExpiry = Date.now() + 3600000; // Token válido por 1 hora
+    console.log({ resetToken, resetTokenExpiry });
 
-    const confirmationUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/api/confirmAccount?token=${validationToken}&email=${email}`;
+    user.resetToken = resetToken;
+    user.resetTokenExpiry = resetTokenExpiry; // Token válido por 1 hora
+    await user.save();
 
-    // Send an email to the user
+    // Enlace para restablecer la contraseña
+    const resetUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/resetPassword?token=${resetToken}&email=${email}`;
+
+    // Configuración del correo electrónico
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: email,
-      subject: 'Email validation for Tennis Tournament Web App',
+      subject: 'Password Reset Request',
       html: `
         <html>
           <head>
@@ -91,10 +86,11 @@ export async function POST(req) {
           </head>
           <body>
             <div class="container">
-              <h1>Welcome to UPM Tennis Tournament!</h1>
-              <p>Thank you for registering with us. Please confirm your email address by clicking the button below:</p>
-              <a class="button" href="${confirmationUrl}">Confirm Email</a>
-              <p>If you did not register for this account, please ignore this email.</p>
+              <h1>UPM Tennis Tournament: reset your password</h1>
+              <p>To reset your password, please click the following button:</p>
+              <a class="button" href="${resetUrl}">Reset Password</a>
+              <p>This link will expire in one hour.</p>
+              <p>If you did not request a password reset for this account, please ignore this email.</p>
               <p>Best regards,<br>The UPM Tennis Tournament Team</p>
             </div>
           </body>
@@ -104,12 +100,9 @@ export async function POST(req) {
 
     await transporter.sendMail(mailOptions);
 
-    // Create a new user
-    //await User.create({ name, email, password: hashedPassword, valiadtionToken });
-
-    return NextResponse.json({ message: 'User registered successfully' }, { status: 201 });
+    return NextResponse.json({ message: 'A reset password email has been sent. Please check your inbox.' }, { status: 200 });
   } catch (error) {
-    console.error('Registration error:', error);
-    return NextResponse.json({ message: 'ERROR: An error ocurred while registering a user', error }, { status: 500 });
+    console.error('Error sending password reset email:', error);
+    return NextResponse.json({ error: 'ERROR: Error sending reset password email' }, { status: 500 });
   }
 }

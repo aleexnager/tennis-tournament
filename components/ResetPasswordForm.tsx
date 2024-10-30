@@ -1,14 +1,23 @@
 "use client";
+
 import React from "react";
 import Link from "next/link";
 import { useState } from "react";
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
-const ForgotPasswordForm = () => {
+interface ResetPasswordFormProps {
+  email: string;
+  token: string;
+}
+
+const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
+  email,
+  token,
+}) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   const router = useRouter();
 
@@ -28,24 +37,26 @@ const ForgotPasswordForm = () => {
     setError(""); // Reset error message
 
     try {
-      const res = await signIn("credentials", {
-        password,
-        redirect: false,
+      const res = await fetch("/api/resetPassword", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, token, password }),
       });
 
-      if (!res) {
-        setError("An unexpected error occurred.");
-        return;
-      }
+      const data = await res.json();
 
-      if (res.error) {
-        setError("Invalid Credentials.");
-        return;
+      if (res.ok) {
+        setSuccessMessage(data.message);
+        const form = e.target as HTMLFormElement;
+        form.reset();
+        setTimeout(() => {
+          router.push("/");
+        }, 8000);
+      } else {
+        setError(data.error);
       }
-
-      router.replace("dashboard");
     } catch (error) {
-      console.log(error);
+      console.log("Error during registering.", error);
     }
   };
 
@@ -58,7 +69,7 @@ const ForgotPasswordForm = () => {
           <input
             onChange={(e) => setPassword(e.target.value)}
             type="password"
-            placeholder="Password"
+            placeholder="New Password"
             className="p-2 border border-gray-300 rounded-md"
           />
           <input
@@ -74,6 +85,12 @@ const ForgotPasswordForm = () => {
           {error && (
             <div className="bg-red-500 text-white text-sm w-fit py-1 px-3 mt-2 rounded-md">
               {error}
+            </div>
+          )}
+
+          {successMessage && (
+            <div className="bg-green-500 text-white text-sm w-fit py-1 px-3 mt-2 rounded-md">
+              {successMessage}
             </div>
           )}
 
@@ -98,4 +115,4 @@ const ForgotPasswordForm = () => {
   );
 };
 
-export default ForgotPasswordForm;
+export default ResetPasswordForm;

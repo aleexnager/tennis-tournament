@@ -25,14 +25,34 @@ const userSchema = new Schema(
       required: true,
       unique: true,
     },
+    total_points: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    total_sets_won: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    total_games_won: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    total_games_lost: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
     password: {
       type: String,
       required: true,
     },
     role: {
       type: String,
-      enum: ["user", "admin"],
-      default: "user",
+      enum: ["player", "admin"],
+      default: "player",
     },
     verified: {
       type: Boolean,
@@ -40,7 +60,19 @@ const userSchema = new Schema(
     },
     validationToken: {
       type: String,
+      required: false,
     },
+    resetToken: {
+      type: String,
+      default: null,
+      required: false,
+    },
+    resetTokenExpiry: {
+      type: Date,
+      default: null,
+      required: false,
+    },
+
   },
   { timestamps: true }
 );

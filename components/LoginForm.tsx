@@ -92,7 +92,7 @@ const LoginForm = () => {
           <div className="flex justify-between">
             <Link
               className="text-blue-500 text-sm mt-3 text-right hover:underline"
-              href="/forgotPassword"
+              href="/sendResetEmail"
             >
               Forgot password?
             </Link>
