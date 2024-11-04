@@ -28,7 +28,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         suppressHydrationWarning={true}
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-bg text-text`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen bg-gradient-to-r from-gray-900 to-gray-800 text-text`}
       >
         <AuthProvider>{children}</AuthProvider>
       </body>

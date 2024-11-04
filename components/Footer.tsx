@@ -29,7 +29,7 @@ const Footer = () => {
             onClick={scrollToTop}
             whileTap={{ scale: 0.7 }}
             transition={{ scale: { duration: 0.2 } }}
-            className="w-14 h-14 p-3 flex items-center justify-center bg-primary text-accent font-semibold rounded-xl"
+            className="w-14 h-14 p-3 flex items-center justify-center bg-gradient-to-br from-primary to-secondary font-semibold rounded-xl"
           >
             <svg
               className="w-7 h-7 z-20 text-bg"

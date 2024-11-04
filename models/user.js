@@ -72,7 +72,6 @@ const userSchema = new Schema(
       default: null,
       required: false,
     },
-
   },
   { timestamps: true }
 );

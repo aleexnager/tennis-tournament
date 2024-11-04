@@ -62,7 +62,7 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
 
   return (
     <div className="grid place-items-center h-screen">
-      <div className="shadow-lg p-5 rounded-lg border-t-4 border-green-500">
+      <div className="shadow-lg p-5 rounded-lg border-t-4 border-green-500 bg-gray-700">
         <h1 className="text-xl font-bold my-4">Change your password</h1>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -70,40 +70,37 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
             onChange={(e) => setPassword(e.target.value)}
             type="password"
             placeholder="New Password"
-            className="p-2 border border-gray-300 rounded-md"
+            className="p-2 border border-gray-300 rounded-md text-gray-700"
           />
           <input
             onChange={(e) => setConfirmPassword(e.target.value)}
             type="password"
             placeholder="Confirm Password"
-            className="p-2 border border-gray-300 rounded-md"
+            className="p-2 border border-gray-300 rounded-md text-gray-700"
           />
-          <button className="bg-green-500 text-white font-bold cursor-pointer p-2 rounded-md hover:bg-green-600">
+          <button className="bg-green-500 font-bold cursor-pointer p-2 rounded-md hover:bg-green-600">
             Reset Password
           </button>
 
           {error && (
-            <div className="bg-red-500 text-white text-sm w-fit py-1 px-3 mt-2 rounded-md">
+            <div className="bg-red-500 text-sm w-fit py-1 px-3 mt-2 rounded-md">
               {error}
             </div>
           )}
 
           {successMessage && (
-            <div className="bg-green-500 text-white text-sm w-fit py-1 px-3 mt-2 rounded-md">
+            <div className="bg-green-500 text-sm w-fit py-1 px-3 mt-2 rounded-md">
               {successMessage}
             </div>
           )}
 
           <div className="flex justify-between">
-            <Link
-              className="text-blue-500 text-sm mt-3 text-right hover:underline"
-              href="/"
-            >
+            <Link className="text-sm mt-3 text-right hover:underline" href="/">
               Log In
             </Link>
 
             <Link
-              className="text-blue-500 text-sm mt-3 text-right hover:underline"
+              className="text-sm mt-3 text-right hover:underline"
               href="/register"
             >
               Register

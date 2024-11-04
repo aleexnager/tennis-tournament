@@ -1,49 +1,70 @@
 "use client";
 
 import { useSession, signOut } from "next-auth/react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import User from "@/models/user";
+import UserEditModal from "./UserEditModal";
 
 const UserInfo = () => {
   const { data: session } = useSession();
+  const [showPassword, setShowPassword] = useState(false);
+
+  const password = session?.user?.password;
+
+  const router = useRouter();
+
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+
+    //ir al modal de edición de perfil UserEditModal y pasarle los datos del usuario usando router.push
+    router.push("/UserEditModal");
+
+    /*const res = await fetch("/api/editProfile", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: "New Name",
+        surname: "New Surname",
+        phone: "New Phone",
+        username: "New Username",
+        password: "New Password",
+      }),
+    });
+    const data = await res.json();
+    console.log(data);*/
+  };
 
   return (
-    <div className="shadow-lg p-8 bg-zinc-300/10 flex flex-col gap-2 my-6">
-      <div>
-        Name: <span className="font-bold">{session?.user?.name}</span>
+    <div className="bg-gradient-to-br from-primary to-secondary rounded-lg p-6">
+      <h2 className="text-2xl font-bold mb-4">Personal Info</h2>
+      <div className="space-y-2 p-4">
+        <p>
+          Username:{" "}
+          <span className="font-medium">{session?.user?.username}</span>
+        </p>
+        <p>
+          Name: <span className="font-medium">{session?.user?.name}</span>
+        </p>
+        <p>
+          Surname: <span className="font-medium">{session?.user?.surname}</span>
+        </p>
+        <p>
+          Email: <span className="font-medium">{session?.user?.email}</span>
+        </p>
+        <p>
+          Phone: <span className="font-medium">{session?.user?.phone}</span>
+        </p>
       </div>
-      <div>
-        Surname: <span className="font-bold">{session?.user?.surname}</span>
+      <div className="flex justify-around">
+        <UserEditModal />
+        <button
+          onClick={() => signOut()}
+          className="bg-red-500 font-semibold px-4 py-2 mt-6 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400"
+        >
+          Log Out
+        </button>
       </div>
-      <div>
-        Email: <span className="font-bold">{session?.user?.email}</span>
-      </div>
-      <div>
-        Phone: <span className="font-bold">{session?.user?.phone}</span>
-      </div>
-      <div>
-        Username: <span className="font-bold">{session?.user?.username}</span>
-      </div>
-      <div>
-        Total points:{" "}
-        <span className="font-bold">{session?.user?.total_points}</span>
-      </div>
-      <div>
-        Total sets won:{" "}
-        <span className="font-bold">{session?.user?.total_sets_won}</span>
-      </div>
-      <div>
-        Total games won:{" "}
-        <span className="font-bold">{session?.user?.total_games_won}</span>
-      </div>
-      <div>
-        Total games lost:{" "}
-        <span className="font-bold">{session?.user?.total_games_lost}</span>
-      </div>
-      <button
-        onClick={() => signOut()}
-        className="bg-red-500 text-white font-bold px-6 py-2 mt-3 rounded-md hover:bg-red-600"
-      >
-        Log Out
-      </button>
     </div>
   );
 };

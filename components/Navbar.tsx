@@ -29,11 +29,11 @@ const Navbar = () => {
 
   return (
     <header className="flex justify-center mt-10 z-20">
-      <nav className="relative flex items-center justify-between sm:justify-center p-1 rounded-full w-11/12 md:w-1/3 h-16 sm:bg-gradient-to-r from-primary to-secondary">
+      <nav className="relative flex items-center justify-between sm:justify-center p-1 rounded-full w-11/12 md:w-1/3 h-16 sm:bg-gradient-to-br from-primary to-secondary">
         {/* Botón del menú en pantallas pequeñas */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="sm:hidden p-3 bg-gradient-to-r from-primary to-secondary rounded-full"
+          className="sm:hidden p-3 bg-gradient-to-br from-primary to-secondary rounded-full"
         >
           {isOpen ? (
             <XMarkIcon className="w-6 h-6 text-bg" />
@@ -43,7 +43,7 @@ const Navbar = () => {
         </button>
 
         {/* Menú para pantallas grandes */}
-        <motion.div className="hidden sm:flex items-center justify-center bg-bg rounded-full w-full h-full">
+        <motion.div className="hidden sm:flex items-center justify-center bg-gray-900 rounded-full w-full h-full">
           <ul className="flex justify-between w-full px-8">
             {navLinks.map((link) => (
               <motion.li
@@ -60,7 +60,7 @@ const Navbar = () => {
         {/* Menú desplegable hacia abajo en pantallas pequeñas con animación */}
         {isOpen && (
           <motion.div
-            className="absolute top-16 left-0 w-full bg-bg shadow-lg rounded-xl border-2 border-accent sm:hidden "
+            className="absolute top-16 left-0 w-full bg-gray-900 shadow-lg rounded-xl border-2 border-accent sm:hidden "
             variants={menuVariants}
             initial="hidden"
             animate="visible"

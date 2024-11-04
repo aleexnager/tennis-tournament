@@ -5,6 +5,7 @@ declare module "next-auth" {
     surname?: string;
     phone?: string;
     username?: string;
+    password?: string;
     total_points?: number;
     total_sets_won?: number;
     total_games_won?: number;
@@ -17,6 +18,7 @@ declare module "next-auth" {
       surname?: string;
       phone?: string;
       username?: string;
+      password?: string;
       total_points?: number;
       total_sets_won?: number;
       total_games_won?: number;

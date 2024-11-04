@@ -23,12 +23,12 @@ export async function POST(req) {
     // Busca el usuario por email
     const user = await User.findOne({ email });
     if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+      return NextResponse.json({ error: 'Account not found' }, { status: 404 });
     }
 
     // Genera un token de restablecimiento de contraseña
     const resetToken = uuidv4();
-    const resetTokenExpiry = Date.now() + 3600000; // Token válido por 1 hora
+    const resetTokenExpiry = Date.now() + 7200000; // Token válido por 1 hora
     console.log({ resetToken, resetTokenExpiry });
 
     user.resetToken = resetToken;

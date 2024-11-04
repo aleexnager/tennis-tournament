@@ -125,7 +125,7 @@ const RegisterForm = () => {
 
   return (
     <div className="grid place-items-center h-screen">
-      <div className="shadow-lg p-5 rounded-lg border-t-4 border-green-500">
+      <div className="shadow-lg p-5 rounded-lg border-t-4 border-green-500 bg-gray-700">
         <h1 className="text-xl font-bold my-4">Register</h1>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -133,43 +133,43 @@ const RegisterForm = () => {
             onChange={(e) => setName(e.target.value)}
             type="text"
             placeholder="Name"
-            className="p-2 border border-gray-300 rounded-md"
+            className="p-2 border border-gray-300 rounded-md text-gray-700"
           />
           <input
             onChange={(e) => setSurname(e.target.value)}
             type="text"
             placeholder="Surname"
-            className="p-2 border border-gray-300 rounded-md"
+            className="p-2 border border-gray-300 rounded-md text-gray-700"
           />
           <input
             onChange={(e) => setPhone(e.target.value)}
             type="text"
             placeholder="Phone"
-            className="p-2 border border-gray-300 rounded-md"
+            className="p-2 border border-gray-300 rounded-md text-gray-700"
           />
           <input
             onChange={(e) => setEmail(e.target.value)}
             type="text"
             placeholder="Email"
-            className="p-2 border border-gray-300 rounded-md"
+            className="p-2 border border-gray-300 rounded-md text-gray-700"
           />
           <input
             onChange={(e) => setUsername(e.target.value)}
             type="text"
             placeholder="Username"
-            className="p-2 border border-gray-300 rounded-md"
+            className="p-2 border border-gray-300 rounded-md text-gray-700"
           />
           <input
             onChange={(e) => setPassword(e.target.value)}
             type="password"
             placeholder="Password"
-            className="p-2 border border-gray-300 rounded-md"
+            className="p-2 border border-gray-300 rounded-md text-gray-700"
           />
           <input
             onChange={(e) => setConfirmPassword(e.target.value)}
             type="password"
             placeholder="Confirm Password"
-            className="p-2 border border-gray-300 rounded-md"
+            className="p-2 border border-gray-300 rounded-md text-gray-700"
           />
 
           {emailSubmitted ? (
@@ -178,12 +178,12 @@ const RegisterForm = () => {
             </p>
           ) : (
             <button
-              className="bg-green-500 text-white font-bold cursor-pointer p-2 rounded-md hover:bg-green-600"
+              className="bg-green-500 font-bold cursor-pointer p-2 rounded-md hover:bg-green-600"
               disabled={isLoading}
             >
               {isLoading ? (
                 <svg
-                  className="animate-spin h-5 w-5 mr-3 text-white inline-flex"
+                  className="animate-spin h-5 w-5 mr-3 inline-flex"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -208,22 +208,19 @@ const RegisterForm = () => {
           )}
 
           {error && (
-            <div className="bg-red-500 text-white text-sm w-fit py-1 px-3 mt-2 rounded-md">
+            <div className="bg-red-500 text-sm w-fit py-1 px-3 mt-2 rounded-md">
               {error}
             </div>
           )}
 
           {successMessage && (
-            <div className="bg-green-500 text-white text-sm w-fit py-1 px-3 mt-2 rounded-md">
+            <div className="bg-green-500 text-sm w-fit py-1 px-3 mt-2 rounded-md">
               {successMessage}
             </div>
           )}
 
           <div className="flex justify-center">
-            <Link
-              className="text-blue-500 text-sm mt-3 text-right hover:underline"
-              href="/"
-            >
+            <Link className="text-sm mt-3 text-right hover:underline" href="/">
               Login
             </Link>
           </div>
