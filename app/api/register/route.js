@@ -17,7 +17,6 @@ const transporter = nodemailer.createTransport({
 export async function POST(req) {
   try {
     const { name, surname, phone, email, username, password } = await req.json();
-    console.log({ name, surname, phone, email, username, password });
 
     const hashedPassword = await bycrypt.hash(password, 10);
     await connectDB();
@@ -26,7 +25,7 @@ export async function POST(req) {
     const validationToken = uuidv4();
 
     // Create a new user
-    const newUser = await User.create({
+    await User.create({
       name,
       surname,
       phone,
@@ -39,7 +38,6 @@ export async function POST(req) {
       total_games_won: 0,
       total_games_lost: 0,
     });
-    console.log('newUser:', newUser);
 
     const confirmationUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/api/confirmAccount?token=${validationToken}&email=${email}`;
 

@@ -15,7 +15,6 @@ const transporter = nodemailer.createTransport({
 
 export async function POST(req) {
   const { email } = await req.json();
-  console.log({ email });
 
   try {
     await connectDB();
@@ -29,7 +28,6 @@ export async function POST(req) {
     // Genera un token de restablecimiento de contraseña
     const resetToken = uuidv4();
     const resetTokenExpiry = Date.now() + 7200000; // Token válido por 1 hora
-    console.log({ resetToken, resetTokenExpiry });
 
     user.resetToken = resetToken;
     user.resetTokenExpiry = resetTokenExpiry; // Token válido por 1 hora

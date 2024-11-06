@@ -14,7 +14,6 @@ export async function POST(req) {
     if (!user) {
       return NextResponse.json({ message: 'User not found' }, { status: 400 });
     }
-    console.log('User:', user);
 
     // Comprobar que datos son != de NULL y modificar aquellos con valor
     if (name) user.name = name;

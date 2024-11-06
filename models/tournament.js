@@ -5,6 +5,7 @@ const tournamentSchema = new Schema(
     name: {
       type: String,
       required: true,
+      unique: true,
     },
     start_date: {
       type: Date,
@@ -30,6 +31,6 @@ const tournamentSchema = new Schema(
   { timestamps: true }
 );
 
-const Tournament = models.Tournament || mongoose.model("Tournament", userSchema);
+const Tournament = models.Tournament || mongoose.model("Tournament", tournamentSchema);
 
 export default Tournament;
