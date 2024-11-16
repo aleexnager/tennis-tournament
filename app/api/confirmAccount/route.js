@@ -1,9 +1,8 @@
 import { connectDB } from "@/lib/mongodb";
 import { NextResponse } from "next/server";
 import User from "@/models/user";
-export const dynamic = "force-dynamic";
 
-export async function GET(req: Request) {
+export async function POST(req) {
   try {
     // Obtener los parámetros de la URL
     const { searchParams } = new URL(req.url);
