@@ -2,7 +2,7 @@ import { connectDB } from "@/lib/mongodb";
 import { NextResponse } from "next/server";
 import User from "@/models/user";
 
-export async function POST(req) {
+export async function GET(req) {
   try {
     // Obtener los parámetros de la URL
     const { searchParams } = new URL(req.url);
