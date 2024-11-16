@@ -1,5 +1,6 @@
 import mongoose, { models, Schema } from "mongoose";
 
+//Modelo de un sólo set para un sólo partido. En un partido pueden haber varios sets. Cada set tendrá varios juegos (game.js).
 const setSchema = new Schema(
   {
     game_id: {

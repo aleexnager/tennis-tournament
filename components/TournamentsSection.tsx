@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import TournamentCard from "./TournamentCard";
-import TournamentManagement from "./TournamentManagement";
+import TournamentManagement from "./TournamentsManagement";
 import { useSession } from "next-auth/react";
 
 interface Tournament {
@@ -11,6 +11,7 @@ interface Tournament {
   start_date: string;
   end_date: string;
   inscription_limit_date: string;
+  max_num_participants: number;
   active: boolean;
 }
 
@@ -58,14 +59,17 @@ const TournamentsSection: React.FC = () => {
             .map((tournament) => (
               <TournamentCard
                 key={tournament._id}
+                _id={tournament._id}
                 name={tournament.name}
                 start_date={tournament.start_date}
                 end_date={tournament.end_date}
                 inscription_limit_date={tournament.inscription_limit_date}
+                max_num_participants={tournament.max_num_participants}
                 active={tournament.active}
               />
             ))}
         </ul>
+
         <h2 className="text-2xl font-semibold mb-8 underline hover:font-bold">
           Upcoming Tournaments
         </h2>
@@ -75,10 +79,12 @@ const TournamentsSection: React.FC = () => {
             .map((tournament) => (
               <TournamentCard
                 key={tournament._id}
+                _id={tournament._id}
                 name={tournament.name}
                 start_date={tournament.start_date}
                 end_date={tournament.end_date}
                 inscription_limit_date={tournament.inscription_limit_date}
+                max_num_participants={tournament.max_num_participants}
                 active={tournament.active}
               />
             ))}
@@ -93,10 +99,12 @@ const TournamentsSection: React.FC = () => {
             .map((tournament) => (
               <TournamentCard
                 key={tournament._id}
+                _id={tournament._id}
                 name={tournament.name}
                 start_date={tournament.start_date}
                 end_date={tournament.end_date}
                 inscription_limit_date={tournament.inscription_limit_date}
+                max_num_participants={tournament.max_num_participants}
                 active={tournament.active}
               />
             ))}

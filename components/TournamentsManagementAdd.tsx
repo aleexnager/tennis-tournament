@@ -2,20 +2,16 @@
 
 import React from "react";
 import { useState } from "react";
-import { useSession } from "next-auth/react";
+import { PlusIcon } from "@heroicons/react/20/solid";
 
-const UserEditModal = () => {
+const TournamentManagement = () => {
   const [showModal, setShowModal] = useState(false);
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleShowModal = () => {
     setShowModal(true);
   };
-
-  const { data: session } = useSession();
-  const email = session?.user?.email;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -24,47 +20,53 @@ const UserEditModal = () => {
       const formData = new FormData(e.currentTarget);
 
       const name = formData.get("name") as string;
-      const surname = formData.get("surname") as string;
-      const phone = formData.get("phone") as string;
-      const username = formData.get("username") as string;
-      const password = formData.get("password") as string;
+      const start_date = formData.get("start_date") as string;
+      const end_date = formData.get("end_date") as string;
+      const inscription_limit_date = formData.get(
+        "inscription_limit_date"
+      ) as string;
+      const max_num_participants = formData.get(
+        "max_num_participants"
+      ) as string;
+      const active = formData.get("active") as string;
 
       if (
         !name &&
-        !surname &&
-        !phone &&
-        !username &&
-        !password &&
-        !confirmPassword
+        !start_date &&
+        !end_date &&
+        !inscription_limit_date &&
+        !max_num_participants &&
+        !active
       ) {
         setShowModal(false);
         setError("");
         return;
       }
 
-      if (password !== confirmPassword) {
-        setError("Passwords do not match.");
-        return;
-      }
-
-      const phoneRegex = /^[0-9]{9}$/;
-      if (phone && !phoneRegex.test(phone)) {
-        setError("Phone number must be 9 digits.");
+      if (
+        !name ||
+        !start_date ||
+        !end_date ||
+        !inscription_limit_date ||
+        !max_num_participants ||
+        !active
+      ) {
+        setError("All fields are required.");
         return;
       }
 
       setError(""); // Reset error message
 
-      const res = await fetch("/api/editUser", {
+      const res = await fetch("/api/addTournament", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name,
-          surname,
-          phone,
-          username,
-          password,
-          email,
+          start_date,
+          end_date,
+          inscription_limit_date,
+          max_num_participants,
+          active,
         }),
       });
 
@@ -80,18 +82,20 @@ const UserEditModal = () => {
         setError(data.error);
       }
     } catch (error) {
-      console.log("Error during updating profile.", error);
+      console.error("An unexpected error occurred:", error);
     }
   };
 
   return (
-    <div className="flex justify-center">
+    <div className="">
       <button
         onClick={handleShowModal}
-        className="bg-green-500 font-semibold px-4 py-2 mt-6 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+        className="flex items-center bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
       >
-        Edit Profile
+        Create Tournament
+        <PlusIcon className="h-6 w-6 ml-3" />
       </button>
+
       {showModal && (
         <div className="fixed inset-0 text-black bg-gray-900 bg-opacity-50 flex items-center justify-center">
           <div className="relative bg-gray-200 p-6 rounded-lg lg:w-1/3 md:w-10/12">
@@ -118,8 +122,10 @@ const UserEditModal = () => {
                 />
               </svg>
             </button>
-            <h2 className="text-2xl font-bold mb-2">Edit Profile</h2>
-            <h3 className="font-semibold mb-6">Change your profile data</h3>
+            <h2 className="text-2xl font-bold mb-2">Create Tournament</h2>
+            <h3 className="font-semibold mb-6">
+              Add all the details to create a new tournament!
+            </h3>
             <form onSubmit={handleSubmit}>
               <div className="space-y-2">
                 <label htmlFor="name">Name</label>
@@ -127,50 +133,51 @@ const UserEditModal = () => {
                   type="text"
                   id="name"
                   name="name"
-                  defaultValue={session?.user?.name}
                   className="w-full border border-gray-300 rounded-lg p-2"
                 />
-                <label htmlFor="surname">Surname</label>
+                <label htmlFor="start_date">Start date</label>
                 <input
-                  type="text"
-                  id="surname"
-                  name="surname"
-                  defaultValue={session?.user?.surname}
+                  type="date"
+                  id="start_date"
+                  name="start_date"
                   className="w-full border border-gray-300 rounded-lg p-2"
                 />
-                <label htmlFor="phone">Phone</label>
+                <label htmlFor="end_date">End date</label>
                 <input
-                  type="text"
-                  id="phone"
-                  name="phone"
-                  defaultValue={session?.user?.phone}
+                  type="date"
+                  id="end_date"
+                  name="end_date"
                   className="w-full border border-gray-300 rounded-lg p-2"
                 />
-                <label htmlFor="username">Username</label>
+                <label htmlFor="inscription_limit_date">
+                  Inscription limit date
+                </label>
                 <input
-                  type="text"
-                  id="username"
-                  name="username"
-                  defaultValue={session?.user?.username}
+                  type="date"
+                  id="inscription_limit_date"
+                  name="inscription_limit_date"
                   className="w-full border border-gray-300 rounded-lg p-2"
                 />
-                <label htmlFor="password">Password</label>
+                <label htmlFor="max_num_participants">
+                  Maximun number of participants
+                </label>
                 <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  placeholder="Enter new password (only if you want to change it)"
+                  type="number"
+                  id="max_num_participants"
+                  name="max_num_participants"
+                  defaultValue={16}
                   className="w-full border border-gray-300 rounded-lg p-2"
                 />
-                <label htmlFor="confirmPassword">Confirm Password</label>
-                <input
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  type="password"
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  placeholder="Confirm new password"
+                <label htmlFor="active">Active</label>
+                <select
+                  id="active"
+                  name="active"
+                  defaultValue="false"
                   className="w-full border border-gray-300 rounded-lg p-2"
-                />
+                >
+                  <option value="true">Yes</option>
+                  <option value="false">No</option>
+                </select>
 
                 {error && (
                   <div className="bg-red-500 text-text text-sm w-fit py-1 px-3 mt-2 rounded-md">
@@ -188,7 +195,7 @@ const UserEditModal = () => {
                   type="submit"
                   className="bg-green-500 w-full hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 text-text px-4 py-2 rounded-lg"
                 >
-                  Update Profile
+                  Create Tournament
                 </button>
               </div>
             </form>
@@ -199,4 +206,4 @@ const UserEditModal = () => {
   );
 };
 
-export default UserEditModal;
+export default TournamentManagement;

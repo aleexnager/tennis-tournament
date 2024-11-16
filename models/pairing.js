@@ -1,5 +1,6 @@
 import mongoose, { models, Schema } from "mongoose";
 
+//Modelo de un solo emparejamiento para un sólo torneo. En un partido habrá un sólo emparejamiento. En un torneo habrá varios emparejamientos.
 const pairingSchema = new Schema(
   {
     tournament_id: {

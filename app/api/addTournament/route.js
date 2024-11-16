@@ -8,10 +8,10 @@ export async function POST(req) {
   try {
     await connectDB();
 
-    // Encuentra al usuario por username
+    // Encuentra al torneo por nombre
     const tournament = await Tournament.findOne({ name });
     if (tournament) {
-      return NextResponse.json({ message: 'Tournament already exists' }, { status: 400 });
+      return NextResponse.json({ error: 'Tournament already exists' }, { status: 400 });
     }
 
     const newTournament = new Tournament({

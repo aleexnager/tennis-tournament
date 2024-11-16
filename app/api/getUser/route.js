@@ -7,10 +7,10 @@ export async function POST(req) {
     await connectDB();
 
     const { emailOrUsername } = await req.json();
+
     const user = await User.findOne({
       $or: [{ email: emailOrUsername }, { username: emailOrUsername }]
     }).select('verified');
-    console.log("user: ", user);
 
     return NextResponse.json({ user });
   } catch (error) {

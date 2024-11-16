@@ -1,16 +1,16 @@
 import { connectDB } from '@/lib/mongodb';
 import { NextResponse } from 'next/server';
-import Tournament from '@/models/tournament';
+import Participant from "@/models/participant";
 
 export async function GET() {
   try {
     await connectDB();
 
-    const tournaments = await Tournament.find({});
+    const participants = await Participant.find({});
 
-    return NextResponse.json({ tournaments }, { status: 200 });
+    return NextResponse.json({ participants }, { status: 200 });
   } catch (error) {
-    console.error('Error fetching tournaments:', error);
+    console.error('Error fetching participants:', error);
     return NextResponse.json({ error: "An error occurred." }, { status: 500 });
   }
 }

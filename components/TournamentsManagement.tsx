@@ -1,12 +1,10 @@
 import React from "react";
-import TournamentManagementAdd from "./TournamentManagementAdd";
-import TournamentManagementDelete from "./TournamentManagementDelete";
+import TournamentManagementAdd from "./TournamentsManagementAdd";
 
 const TournamentManagement = () => {
   return (
     <div>
       <TournamentManagementAdd />
-      <TournamentManagementDelete />
     </div>
   );
 };

@@ -2,11 +2,41 @@
 
 import React from "react";
 import { useState } from "react";
+import { PencilIcon } from "@heroicons/react/20/solid";
 
-const TournamentManagement = () => {
+interface TournamentCardEditModalProps {
+  _id: string;
+  name: string;
+  start_date: string;
+  end_date: string;
+  inscription_limit_date: string;
+  max_num_participants: number;
+  active: boolean;
+}
+
+const TournamentCardEditModal: React.FC<TournamentCardEditModalProps> = ({
+  _id,
+  name,
+  start_date,
+  end_date,
+  inscription_limit_date,
+  max_num_participants,
+  active,
+}) => {
   const [showModal, setShowModal] = useState(false);
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+
+  //#region formatDate
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toISOString().split("T")[0]; // Extrae la parte de la fecha en formato YYYY-MM-DD
+  };
+
+  const formattedStartDate = formatDate(start_date);
+  const formattedEndDate = formatDate(end_date);
+  const formattedInscriptionLimitDate = formatDate(inscription_limit_date);
+  //#endregion
 
   const handleShowModal = () => {
     setShowModal(true);
@@ -18,16 +48,17 @@ const TournamentManagement = () => {
     try {
       const formData = new FormData(e.currentTarget);
 
-      const name = formData.get("name") as string;
-      const start_date = formData.get("start_date") as string;
-      const end_date = formData.get("end_date") as string;
-      const inscription_limit_date = formData.get(
-        "inscription_limit_date"
-      ) as string;
-      const max_num_participants = formData.get(
-        "max_num_participants"
-      ) as string;
-      const active = formData.get("active") as string;
+      const updatedTournament = {
+        _id,
+        name: formData.get("name") as string,
+        start_date: formData.get("start_date") as string,
+        end_date: formData.get("end_date") as string,
+        inscription_limit_date: formData.get(
+          "inscription_limit_date"
+        ) as string,
+        max_num_participants: Number(formData.get("max_num_participants")),
+        active: formData.get("active") === "true",
+      };
 
       if (
         !name &&
@@ -43,12 +74,12 @@ const TournamentManagement = () => {
       }
 
       if (
-        !name ||
-        !start_date ||
-        !end_date ||
-        !inscription_limit_date ||
-        !max_num_participants ||
-        !active
+        !updatedTournament.name ||
+        !updatedTournament.start_date ||
+        !updatedTournament.end_date ||
+        !updatedTournament.inscription_limit_date ||
+        !updatedTournament.max_num_participants ||
+        !updatedTournament.active
       ) {
         setError("All fields are required.");
         return;
@@ -56,17 +87,10 @@ const TournamentManagement = () => {
 
       setError(""); // Reset error message
 
-      const res = await fetch("/api/addTournament", {
+      const res = await fetch("/api/editTournament", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name,
-          start_date,
-          end_date,
-          inscription_limit_date,
-          max_num_participants,
-          active,
-        }),
+        body: JSON.stringify(updatedTournament),
       });
 
       const data = await res.json();
@@ -86,15 +110,16 @@ const TournamentManagement = () => {
   };
 
   return (
-    <div className="z-20">
+    <div className="">
       <button
         onClick={handleShowModal}
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        className="bg-blue-500 text-white rounded-lg p-2 hover:bg-blue-700"
       >
-        Create Tournament
+        <PencilIcon className="h-6 w-6" />
       </button>
+
       {showModal && (
-        <div className="fixed inset-0 text-black bg-gray-900 bg-opacity-50 flex items-center justify-center">
+        <div className="z-20 fixed inset-0 text-black bg-gray-900 bg-opacity-50 flex items-center justify-center">
           <div className="relative bg-gray-200 p-6 rounded-lg lg:w-1/3 md:w-10/12">
             <button
               onClick={() => {
@@ -130,6 +155,7 @@ const TournamentManagement = () => {
                   type="text"
                   id="name"
                   name="name"
+                  defaultValue={name}
                   className="w-full border border-gray-300 rounded-lg p-2"
                 />
                 <label htmlFor="start_date">Start date</label>
@@ -137,6 +163,7 @@ const TournamentManagement = () => {
                   type="date"
                   id="start_date"
                   name="start_date"
+                  defaultValue={formattedStartDate}
                   className="w-full border border-gray-300 rounded-lg p-2"
                 />
                 <label htmlFor="end_date">End date</label>
@@ -144,6 +171,7 @@ const TournamentManagement = () => {
                   type="date"
                   id="end_date"
                   name="end_date"
+                  defaultValue={formattedEndDate}
                   className="w-full border border-gray-300 rounded-lg p-2"
                 />
                 <label htmlFor="inscription_limit_date">
@@ -153,6 +181,7 @@ const TournamentManagement = () => {
                   type="date"
                   id="inscription_limit_date"
                   name="inscription_limit_date"
+                  defaultValue={formattedInscriptionLimitDate}
                   className="w-full border border-gray-300 rounded-lg p-2"
                 />
                 <label htmlFor="max_num_participants">
@@ -162,14 +191,14 @@ const TournamentManagement = () => {
                   type="number"
                   id="max_num_participants"
                   name="max_num_participants"
-                  defaultValue={16}
+                  defaultValue={max_num_participants}
                   className="w-full border border-gray-300 rounded-lg p-2"
                 />
                 <label htmlFor="active">Active</label>
                 <select
                   id="active"
                   name="active"
-                  defaultValue="false"
+                  defaultValue={active ? "true" : "false"}
                   className="w-full border border-gray-300 rounded-lg p-2"
                 >
                   <option value="true">Yes</option>
@@ -192,7 +221,7 @@ const TournamentManagement = () => {
                   type="submit"
                   className="bg-green-500 w-full hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 text-text px-4 py-2 rounded-lg"
                 >
-                  Create Tournament
+                  Update Tournament
                 </button>
               </div>
             </form>
@@ -203,6 +232,4 @@ const TournamentManagement = () => {
   );
 };
 
-export default TournamentManagement;
-
-/*Aqui podría tener TournamentManagement y luego TournamentCreate, TournamentEdit (en edit también elimino un torneo)*/
+export default TournamentCardEditModal;

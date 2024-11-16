@@ -1,5 +1,6 @@
 import mongoose, { models, Schema } from "mongoose";
 
+//Modelo de un sólo participante para un sólo torneo. Para saber si un usuario está participando en un torneo.
 const participantSchema = new Schema(
   {
     user_id: {
