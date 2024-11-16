@@ -1,6 +1,6 @@
 import { connectDB } from '@/lib/mongodb';
-import User from '@/models/user';
 import { NextResponse } from 'next/server';
+import User from '@/models/user';
 import bycrypt from 'bcryptjs';
 import nodemailer from 'nodemailer';
 import { v4 as uuidv4 } from 'uuid';

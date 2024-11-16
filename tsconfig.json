@@ -30,6 +30,6 @@
     "app/api/auth/[...nextauth]/route.js",
     "app/api/sendResetEmail/route.js",
     "app/api/editUser/route.js"
-  ],
+, "app/api/confirmAccount/route.js"  ],
   "exclude": ["node_modules"]
 }
