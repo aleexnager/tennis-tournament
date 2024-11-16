@@ -29,7 +29,8 @@
     ".next/types/**/*.ts",
     "app/api/auth/[...nextauth]/route.js",
     "app/api/sendResetEmail/route.js",
-    "app/api/editUser/route.js"
-, "app/api/confirmAccount/route.js"  ],
+    "app/api/editUser/route.js",
+    "app/api/confirmAccount/route.ts"
+  ],
   "exclude": ["node_modules"]
 }

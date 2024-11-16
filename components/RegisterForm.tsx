@@ -115,7 +115,7 @@ const RegisterForm = () => {
       } else {
         setIsLoading(false);
         setError("User registration failed.");
-        console.log("User registration failed.");
+        console.log("User registration failed.", res);
       }
     } catch (error) {
       setIsLoading(false);
