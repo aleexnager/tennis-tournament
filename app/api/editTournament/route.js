@@ -19,7 +19,7 @@ export async function POST(req) {
     if (end_date) tournament.end_date = end_date;
     if (inscription_limit_date) tournament.inscription_limit_date = inscription_limit_date;
     if (max_num_participants) tournament.max_num_participants = max_num_participants;
-    if (active) tournament.active = active;
+    tournament.active = active;
 
     await tournament.save();
 

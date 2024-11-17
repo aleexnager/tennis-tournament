@@ -65,8 +65,7 @@ const TournamentCardEditModal: React.FC<TournamentCardEditModalProps> = ({
         !start_date &&
         !end_date &&
         !inscription_limit_date &&
-        !max_num_participants &&
-        !active
+        !max_num_participants
       ) {
         setShowModal(false);
         setError("");
@@ -78,8 +77,7 @@ const TournamentCardEditModal: React.FC<TournamentCardEditModalProps> = ({
         !updatedTournament.start_date ||
         !updatedTournament.end_date ||
         !updatedTournament.inscription_limit_date ||
-        !updatedTournament.max_num_participants ||
-        !updatedTournament.active
+        !updatedTournament.max_num_participants
       ) {
         setError("All fields are required.");
         return;

@@ -19,7 +19,7 @@ const TournamentsSection: React.FC = () => {
   const { data: session } = useSession();
   const isAdmin = session?.user?.role === "admin";
   const [tournaments, setTournaments] = useState<Tournament[]>([]);
-  console.log(tournaments);
+  const [currentDate] = useState<Date>(new Date());
 
   useEffect(() => {
     console.log("Fetching tournaments...");
@@ -37,6 +37,33 @@ const TournamentsSection: React.FC = () => {
 
     fetchTournaments();
   }, []);
+
+  //region filters
+  const filterCurrentTournaments = (tournament: Tournament) => {
+    const oneMonthLater = new Date();
+    oneMonthLater.setMonth(oneMonthLater.getMonth() + 1);
+
+    // Filtro para torneos activos
+    return tournament.active;
+  };
+
+  const filterUpcomingTournaments = (tournament: Tournament) => {
+    const oneMonthLater = new Date();
+    const endDate = new Date(tournament.end_date);
+
+    oneMonthLater.setMonth(oneMonthLater.getMonth() + 1);
+
+    // Filtro para torneos inactivos y cuya fecha de fin no haya pasado
+    return !tournament.active && endDate > currentDate;
+  };
+
+  const filterPastTournaments = (tournament: Tournament) => {
+    const endDate = new Date(tournament.end_date);
+
+    // Filtro para torneos inactivos y cuya fecha de fin ya haya pasado
+    return !tournament.active && endDate < currentDate;
+  };
+  //endregion
 
   return (
     <section className="xl:my-12 p-10">
@@ -57,7 +84,7 @@ const TournamentsSection: React.FC = () => {
         </h2>
         <ul className="grid justify-center md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
           {tournaments
-            .filter((tournament) => tournament.active) // Filtramos los torneos activos
+            .filter(filterCurrentTournaments) // Filtramos los torneos activos
             .map((tournament) => (
               <TournamentCard
                 key={tournament._id}
@@ -77,7 +104,7 @@ const TournamentsSection: React.FC = () => {
         </h2>
         <ul className="grid justify-center md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
           {tournaments
-            .filter((tournament) => !tournament.active) // Filtramos los torneos inactivos
+            .filter(filterUpcomingTournaments) // Filtramos los torneos inactivos
             .map((tournament) => (
               <TournamentCard
                 key={tournament._id}
@@ -97,7 +124,7 @@ const TournamentsSection: React.FC = () => {
         </h2>
         <ul className="grid justify-center md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
           {tournaments
-            .filter((tournament) => !tournament.active) // Filtramos los torneos inactivos
+            .filter(filterPastTournaments) // Filtramos los torneos inactivos
             .map((tournament) => (
               <TournamentCard
                 key={tournament._id}

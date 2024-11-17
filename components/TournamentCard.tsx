@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { TrashIcon } from "@heroicons/react/20/solid";
+import { tournamentsData } from "@/lib/config/constants";
 import TournamentCardEditModal from "./TournamentCardEditModal";
 
 interface TournamentCardProps {
@@ -32,20 +33,29 @@ const TournamentCard: React.FC<TournamentCardProps> = ({
 
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [error, setError] = useState("");
+  const isAdmin = session?.user?.role === "admin";
+
+  //region cardImage
+  // Función para obtener la ruta de la imagen según el nombre del torneo
+  const getTournamentImage = (name: string): string => {
+    const tournament = tournamentsData.find(
+      (tournament) => tournament.name === name
+    );
+    return tournament ? tournament.imgPath : "/images/tournament_other.jpg"; // Ruta por defecto
+  };
+
+  const [imagePath, setImagePath] = useState<string>("");
+
+  useEffect(() => {
+    setImagePath(getTournamentImage(name)); // Establece la imagen en el efecto
+  }, [name]);
+  //endregion
 
   useEffect(() => {
     if (active && session?.user?._id) {
       console.log("Checking subscription...");
       const checkSubscription = async () => {
         try {
-          /*const res = await fetch(`/api/getParticipant`, {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            user_id: session?.user._id,
-            tournament_name: name,
-          }),
-        });*/
           const res = await fetch(
             `/api/getParticipant?user_id=${session?.user._id}&tournament_name=${name}`
           );
@@ -84,7 +94,7 @@ const TournamentCard: React.FC<TournamentCardProps> = ({
       });
 
       if (res.ok) {
-        router.push("/tournaments/tournament");
+        router.push(`/tournaments/tournament?tournament_id=${_id}`);
       } else {
         const data = await res.json();
         setError(data.error);
@@ -128,7 +138,7 @@ const TournamentCard: React.FC<TournamentCardProps> = ({
   };
 
   const handleViewDetails = () => {
-    router.push("/tournaments/tournament");
+    router.push(`/tournaments/tournament?tournament_id=${_id}`);
   };
 
   const handleDelete = async () => {
@@ -163,30 +173,34 @@ const TournamentCard: React.FC<TournamentCardProps> = ({
 
   return (
     <div className="relative flex flex-col card bg-gradient-to-br from-primary to-secondary w-full shadow-xl rounded-2xl">
-      <div className="absolute top-3 left-3 flex gap-2">
-        <button
-          onClick={handleDelete}
-          className="bg-red-600 text-white rounded-lg p-2 hover:bg-red-700"
-        >
-          <TrashIcon className="h-6 w-6" />
-        </button>
-      </div>
-      <div className="absolute top-3 right-3 flex gap-2">
-        <TournamentCardEditModal
-          _id={_id}
-          name={name}
-          start_date={start_date}
-          end_date={end_date}
-          inscription_limit_date={inscription_limit_date}
-          max_num_participants={max_num_participants}
-          active={active}
-        />
-      </div>
-      <figure className="flex justify-center items-center">
+      {isAdmin && (
+        <div>
+          <div className="absolute top-3 left-3 flex gap-2">
+            <button
+              onClick={handleDelete}
+              className="bg-red-600 text-white rounded-lg p-2 hover:bg-red-700"
+            >
+              <TrashIcon className="h-6 w-6" />
+            </button>
+          </div>
+          <div className="absolute top-3 right-3 flex gap-2">
+            <TournamentCardEditModal
+              _id={_id}
+              name={name}
+              start_date={start_date}
+              end_date={end_date}
+              inscription_limit_date={inscription_limit_date}
+              max_num_participants={max_num_participants}
+              active={active}
+            />
+          </div>
+        </div>
+      )}
+      <figure className="flex justify-center items-center overflow-hidden rounded-t-2xl w-full h-full">
         <Image
-          src="/images/tournament_summer.jpg"
+          src={imagePath}
           alt="Tournament"
-          className="rounded-t-2xl"
+          className="object-cover w-full h-full"
           width={600}
           height={300}
         />
