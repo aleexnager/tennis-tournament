@@ -2,6 +2,7 @@ import { connectDB } from "@/lib/mongodb";
 import { NextResponse } from "next/server";
 import Participant from "@/models/participant";
 import Tournament from "@/models/tournament";
+export const dynamic = "force-dynamic";
 
 export async function GET(req: Request) {
   try {

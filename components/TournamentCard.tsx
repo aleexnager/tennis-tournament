@@ -34,10 +34,11 @@ const TournamentCard: React.FC<TournamentCardProps> = ({
   const [error, setError] = useState("");
 
   useEffect(() => {
-    console.log("Checking subscription...");
-    const checkSubscription = async () => {
-      try {
-        /*const res = await fetch(`/api/getParticipant`, {
+    if (active && session?.user?._id) {
+      console.log("Checking subscription...");
+      const checkSubscription = async () => {
+        try {
+          /*const res = await fetch(`/api/getParticipant`, {
           method: "GET",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -45,30 +46,31 @@ const TournamentCard: React.FC<TournamentCardProps> = ({
             tournament_name: name,
           }),
         });*/
-        const res = await fetch(
-          `/api/getParticipant?user_id=${session?.user._id}&tournament_name=${name}`
-        );
+          const res = await fetch(
+            `/api/getParticipant?user_id=${session?.user._id}&tournament_name=${name}`
+          );
 
-        if (!res.ok) throw new Error("Error fetching participant");
+          if (!res.ok) throw new Error("Error fetching participant");
 
-        const data = await res.json();
-        if (
-          res.ok &&
-          data.participant.user_id === session?.user._id &&
-          data.participant.tournament_id === _id
-        ) {
-          setIsSubscribed(true);
-        } else {
+          const data = await res.json();
+          if (
+            res.ok &&
+            data.participant.user_id === session?.user._id &&
+            data.participant.tournament_id === _id
+          ) {
+            setIsSubscribed(true);
+          } else {
+            setIsSubscribed(false);
+          }
+        } catch (err) {
+          console.error("Error checking subscription:", err);
           setIsSubscribed(false);
         }
-      } catch (err) {
-        console.error("Error checking subscription:", err);
-        setIsSubscribed(false);
-      }
-    };
+      };
 
-    checkSubscription();
-  }, [session?.user._id, name]);
+      checkSubscription();
+    }
+  }, [session?.user._id, name, _id, active]);
 
   const handleSignUp = async () => {
     try {
