@@ -4,7 +4,7 @@ import React from "react";
 import { useState } from "react";
 import { PlusIcon } from "@heroicons/react/20/solid";
 
-const TournamentManagement = () => {
+const TournamentManagementAdd = () => {
   const [showModal, setShowModal] = useState(false);
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -206,4 +206,4 @@ const TournamentManagement = () => {
   );
 };
 
-export default TournamentManagement;
+export default TournamentManagementAdd;

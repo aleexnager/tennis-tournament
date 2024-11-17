@@ -34,33 +34,40 @@ const TournamentCard: React.FC<TournamentCardProps> = ({
   const [error, setError] = useState("");
 
   useEffect(() => {
+    console.log("Checking subscription...");
     const checkSubscription = async () => {
       try {
-        const res = await fetch(`/api/getParticipant`, {
-          method: "POST",
+        /*const res = await fetch(`/api/getParticipant`, {
+          method: "GET",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             user_id: session?.user._id,
             tournament_name: name,
           }),
-        });
+        });*/
+        const res = await fetch(
+          `/api/getParticipant?user_id=${session?.user._id}&tournament_name=${name}`
+        );
+
+        if (!res.ok) throw new Error("Error fetching participant");
 
         const data = await res.json();
-
-        if (res.ok && data.participant) {
-          setIsSubscribed(true); // El usuario está inscrito
+        if (
+          res.ok &&
+          data.participant.user_id === session?.user._id &&
+          data.participant.tournament_id === _id
+        ) {
+          setIsSubscribed(true);
         } else {
-          setIsSubscribed(false); // El usuario no está inscrito
+          setIsSubscribed(false);
         }
       } catch (err) {
         console.error("Error checking subscription:", err);
-        setIsSubscribed(false); // Manejo de error
+        setIsSubscribed(false);
       }
     };
 
-    if (session?.user._id) {
-      checkSubscription();
-    }
+    checkSubscription();
   }, [session?.user._id, name]);
 
   const handleSignUp = async () => {
@@ -74,11 +81,10 @@ const TournamentCard: React.FC<TournamentCardProps> = ({
         }),
       });
 
-      const data = await res.json();
-
       if (res.ok) {
         router.push("/tournaments/tournament");
       } else {
+        const data = await res.json();
         setError(data.error);
         setTimeout(() => {
           setError(""); // Reset error message
@@ -134,11 +140,10 @@ const TournamentCard: React.FC<TournamentCardProps> = ({
         body: JSON.stringify({ name }),
       });
 
-      const data = await res.json();
-
       if (res.ok) {
         location.reload();
       } else {
+        const data = await res.json();
         setError(data.error);
         setTimeout(() => {
           setError(""); // Reset error message

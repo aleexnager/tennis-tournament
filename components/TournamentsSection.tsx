@@ -19,17 +19,19 @@ const TournamentsSection: React.FC = () => {
   const { data: session } = useSession();
   const isAdmin = session?.user?.role === "admin";
   const [tournaments, setTournaments] = useState<Tournament[]>([]);
+  console.log(tournaments);
 
   useEffect(() => {
+    console.log("Fetching tournaments...");
     const fetchTournaments = async () => {
       try {
-        const response = await fetch("/api/getTournaments");
-        if (!response.ok) throw new Error("Error fetching tournaments");
+        const res = await fetch("/api/getTournaments");
+        if (!res.ok) throw new Error("Error fetching tournaments");
 
-        const data = await response.json();
+        const data = await res.json();
         setTournaments(data.tournaments);
-      } catch (error) {
-        console.error("Failed to fetch tournaments:", error);
+      } catch (err) {
+        console.error("Failed to fetch tournaments:", err);
       }
     };
 

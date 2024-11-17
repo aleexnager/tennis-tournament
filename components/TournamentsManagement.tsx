@@ -10,5 +10,3 @@ const TournamentManagement = () => {
 };
 
 export default TournamentManagement;
-
-/*Aqui podría tener TournamentManagement y luego TournamentCreate, TournamentEdit (en edit también elimino un torneo)*/
