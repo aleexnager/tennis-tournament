@@ -18,22 +18,21 @@ export async function POST(req) {
 
   try {
     await connectDB();
-    console.log("check0");
+
     // Busca el usuario por email
     const user = await User.findOne({ email });
     if (!user) {
       return NextResponse.json({ error: 'Account not found' }, { status: 404 });
     }
-    console.log("check1");
+
     // Genera un token de restablecimiento de contraseña
     const resetToken = uuidv4();
     const resetTokenExpiry = Date.now() + 7200000; // Token válido por 1 hora
-    console.log("check2");
+
     user.resetToken = resetToken;
     user.resetTokenExpiry = resetTokenExpiry; // Token válido por 1 hora
     await user.save();
 
-    console.log("check3");
     // Enlace para restablecer la contraseña
     const resetUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/resetPassword?token=${resetToken}&email=${email}`;
 
@@ -96,10 +95,9 @@ export async function POST(req) {
         </html>
       `,
     };
-    console.log("check4");
 
     await transporter.sendMail(mailOptions);
-    console.log("check5");
+
     return NextResponse.json({ message: 'A reset password email has been sent. Please check your inbox.' }, { status: 200 });
   } catch (error) {
     console.error('Error sending password reset email:', error);
