@@ -1,6 +1,6 @@
 {
   "functions": {
-    "api/index": {
+    "index": {
       "maxDuration": 20
     }
   }
