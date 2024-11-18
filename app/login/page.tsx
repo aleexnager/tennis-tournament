@@ -1,9 +1,9 @@
-import RegisterForm from "@/components/RegisterForm";
+import LoginForm from "@/components/LoginForm";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/config/authOptions";
 
-export default async function Register() {
+export default async function Login() {
   const session = await getServerSession(authOptions);
   console.log("session: ", session);
 
@@ -11,7 +11,7 @@ export default async function Register() {
 
   return (
     <main>
-      <RegisterForm />
+      <LoginForm />
     </main>
   );
 }

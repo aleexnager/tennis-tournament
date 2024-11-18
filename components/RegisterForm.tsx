@@ -220,7 +220,10 @@ const RegisterForm = () => {
           )}
 
           <div className="flex justify-center">
-            <Link className="text-sm mt-3 text-right hover:underline" href="/">
+            <Link
+              className="text-sm mt-3 text-right hover:underline"
+              href="/login"
+            >
               Login
             </Link>
           </div>

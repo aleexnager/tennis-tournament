@@ -95,7 +95,10 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
           )}
 
           <div className="flex justify-between">
-            <Link className="text-sm mt-3 text-right hover:underline" href="/">
+            <Link
+              className="text-sm mt-3 text-right hover:underline"
+              href="/login"
+            >
               Log In
             </Link>
 
