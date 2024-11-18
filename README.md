@@ -1,4 +1,4 @@
-This proyect will not work properly without the data on .env which is for obvious reasons missing. Email services and Database services will not work properly.
+This proyect will not work properly without the data on .env which is missing for obvious reasons. Email services and Database services will not work properly.
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
