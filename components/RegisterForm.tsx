@@ -110,7 +110,7 @@ const RegisterForm = () => {
         const form = e.target as HTMLFormElement;
         form.reset();
         setTimeout(() => {
-          router.push("/");
+          router.push("/login");
         }, 8000);
       } else {
         setIsLoading(false);

@@ -3,12 +3,12 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-export default function Home() {
+export default async function Home() {
   const router = useRouter();
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      router.push("/login"); // Redirect to the login page after 3 seconds
+      router.push("/login");
     }, 1500);
 
     return () => clearTimeout(timer); // Cleanup the timer

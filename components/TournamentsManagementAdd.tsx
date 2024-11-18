@@ -97,7 +97,7 @@ const TournamentManagementAdd = () => {
       </button>
 
       {showModal && (
-        <div className="fixed inset-0 text-black bg-gray-900 bg-opacity-50 flex items-center justify-center">
+        <div className="z-20 fixed inset-0 text-black bg-gray-900 bg-opacity-50 flex items-center justify-center">
           <div className="relative bg-gray-200 p-6 rounded-lg lg:w-1/3 md:w-10/12">
             <button
               onClick={() => {

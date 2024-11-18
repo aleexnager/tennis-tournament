@@ -17,18 +17,18 @@ const UserTournaments = () => {
           <tbody className="text-gray-900">
             <tr className="bg-gray-100 hover:bg-gray-200">
               <td className="py-2 px-4 text-center">Winter</td>
-              <td className="py-2 px-4 text-center">2</td>
-              <td className="py-2 px-4 text-center">3</td>
+              <td className="py-2 px-4 text-center">2000</td>
+              <td className="py-2 px-4 text-center">1</td>
             </tr>
             <tr className="bg-white hover:bg-gray-200">
               <td className="py-2 px-4 text-center">Summer</td>
-              <td className="py-2 px-4 text-center">6</td>
-              <td className="py-2 px-4 text-center">7</td>
+              <td className="py-2 px-4 text-center">1500</td>
+              <td className="py-2 px-4 text-center">2</td>
             </tr>
             <tr className="bg-gray-100 hover:bg-gray-200">
               <td className="py-2 px-4 text-center">Autumn</td>
-              <td className="py-2 px-4 text-center">10</td>
-              <td className="py-2 px-4 text-center">11</td>
+              <td className="py-2 px-4 text-center">400</td>
+              <td className="py-2 px-4 text-center">8</td>
             </tr>
           </tbody>
         </table>
